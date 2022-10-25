@@ -1,26 +1,36 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="app">
+    <BaseLayout v-if="!isLoginPage">
+      <router-view />
+    </BaseLayout>
+    <router-view v-else />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { computed, onMounted } from "vue-demi";
+import { useQueryProvider } from "vue-query";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  setup() {
+    onMounted(() => {
+      useQueryProvider();
+    });
+
+    const isLoginPage = computed(() => {
+      return window.location.pathname === "/login";
+    });
+
+    return {
+      isLoginPage,
+    };
+  },
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.app {
+  min-height: 100vh;
 }
 </style>
